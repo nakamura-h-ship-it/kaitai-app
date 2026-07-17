@@ -1,0 +1,9 @@
+{
+  "name": "解体案件管理",
+  "short_name": "解体案件管理",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#F0F4F8",
+  "theme_color": "#1565C0",
+  "icons": []
+}

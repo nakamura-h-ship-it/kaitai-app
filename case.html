@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>案件登録・編集 - 解体案件管理</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1565C0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="app-header">
+    <button class="back-btn" onclick="location.href='index.html'">←</button>
+    <h1 id="page-title">案件登録</h1>
+  </header>
+
+  <div class="main-content">
+    <div id="form-loading" class="loading"><div class="loading-spinner"></div></div>
+
+    <form id="case-form" style="display:none">
+
+      <div class="form-section-title">基本情報</div>
+
+      <div class="form-group">
+        <label class="form-label">現場名／顧客名<span class="required">必須</span></label>
+        <input class="form-input" type="text" id="f-siteName" placeholder="例：田中様邸 木造2階解体" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">現場住所</label>
+        <input class="form-input" type="text" id="f-address" placeholder="例：〇〇県〇〇市...">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">顧客連絡先</label>
+        <input class="form-input" type="text" id="f-customerContact" placeholder="電話番号など">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">対応業者名・連絡先</label>
+        <input class="form-input" type="text" id="f-vendorInfo" placeholder="業者名・電話番号など">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">注文住宅営業担当者名</label>
+        <input class="form-input" type="text" id="f-salesRepName" placeholder="紹介元（ハウスメーカー等）の営業担当者名">
+      </div>
+
+      <div class="form-section-title">日程・金額</div>
+
+      <div class="form-group">
+        <label class="form-label">現地立会い予定日時</label>
+        <input class="form-input" type="text" id="f-siteVisitAt" placeholder="例：7/20(月) 10:00〜">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">着工予定日</label>
+        <input class="form-input" type="date" id="f-startDate">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">完工予定日</label>
+        <input class="form-input" type="date" id="f-completionDate">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">金額</label>
+        <input class="form-input" type="text" id="f-amount" placeholder="例：1,500,000円（合計額のメモ）">
+      </div>
+
+      <div class="form-section-title">ステータス</div>
+
+      <div class="form-group">
+        <label class="form-label">現在のステータス</label>
+        <select class="form-select" id="f-status"></select>
+      </div>
+
+      <div class="form-section-title">備考</div>
+
+      <div class="form-group">
+        <textarea class="form-textarea" id="f-notes" placeholder="自由に記入してください"></textarea>
+      </div>
+
+      <div class="form-section-title">次のアクション予定</div>
+
+      <div class="form-group">
+        <label class="form-label">次にやるべきアクションの予定日時</label>
+        <input class="form-input" type="datetime-local" id="f-nextActionAt">
+        <div class="form-hint">将来のリマインダー・LINE通知機能のための項目です。今は表示のみで通知は行われません。</div>
+      </div>
+
+      <button type="submit" class="btn btn-primary" id="save-btn">保存する</button>
+      <button type="button" class="btn btn-danger" id="delete-btn" style="display:none">この案件を削除する</button>
+    </form>
+  </div>
+
+  <div class="confirm-overlay" id="confirm-overlay" style="display:none">
+    <div class="confirm-box">
+      <div class="confirm-message">この案件を削除します。<br>この操作は取り消せません。よろしいですか？</div>
+      <div class="confirm-actions">
+        <button class="btn btn-secondary" id="confirm-cancel">キャンセル</button>
+        <button class="btn btn-danger" id="confirm-delete">削除する</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/case.js"></script>
+</body>
+</html>
