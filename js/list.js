@@ -63,6 +63,8 @@
     const status = getStatusInfo(c.status);
     const rows = [];
     if (c.address) rows.push(fieldRow('住所', escapeHtml(c.address)));
+    if (c.salesRepName) rows.push(fieldRow('営業担当', escapeHtml(c.salesRepName)));
+    if (c.inquiryReceivedDate) rows.push(fieldRow('受注日', formatDateJP(c.inquiryReceivedDate)));
     if (c.customerContact) rows.push(fieldRow('連絡先', escapeHtml(c.customerContact)));
     if (c.vendorInfo) rows.push(fieldRow('業者', escapeHtml(c.vendorInfo)));
     if (c.siteVisitAt) rows.push(fieldRow('現地立会い', escapeHtml(c.siteVisitAt)));

@@ -9,6 +9,9 @@
     document.getElementById('page-title').textContent = isEditMode ? '案件詳細・編集' : '新規案件登録';
     document.getElementById('delete-btn').style.display = isEditMode ? 'block' : 'none';
 
+    document.querySelectorAll('.full-only').forEach(el => { el.style.display = isEditMode ? '' : 'none'; });
+    document.querySelectorAll('.new-only').forEach(el => { el.style.display = isEditMode ? 'none' : ''; });
+
     document.getElementById('case-form').addEventListener('submit', onSubmit);
     document.getElementById('delete-btn').addEventListener('click', () => toggleConfirm(true));
     document.getElementById('confirm-cancel').addEventListener('click', () => toggleConfirm(false));
@@ -18,6 +21,7 @@
       loadCase();
     } else {
       document.getElementById('f-status').value = STATUSES[0].key;
+      document.getElementById('f-inquiryReceivedDate').value = getTodayString();
       showForm();
     }
   }
@@ -42,6 +46,7 @@
       }
       const c = doc.data();
       document.getElementById('f-siteName').value = c.siteName || '';
+      document.getElementById('f-inquiryReceivedDate').value = c.inquiryReceivedDate || '';
       document.getElementById('f-address').value = c.address || '';
       document.getElementById('f-customerContact').value = c.customerContact || '';
       document.getElementById('f-vendorInfo').value = c.vendorInfo || '';
@@ -63,6 +68,7 @@
   function collectFormValues() {
     return {
       siteName: document.getElementById('f-siteName').value.trim(),
+      inquiryReceivedDate: document.getElementById('f-inquiryReceivedDate').value,
       address: document.getElementById('f-address').value.trim(),
       customerContact: document.getElementById('f-customerContact').value.trim(),
       vendorInfo: document.getElementById('f-vendorInfo').value.trim(),

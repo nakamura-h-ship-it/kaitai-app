@@ -29,18 +29,13 @@
       </div>
 
       <div class="form-group">
+        <label class="form-label">見積もり依頼受注日</label>
+        <input class="form-input" type="date" id="f-inquiryReceivedDate">
+      </div>
+
+      <div class="form-group">
         <label class="form-label">現場住所</label>
         <input class="form-input" type="text" id="f-address" placeholder="例：〇〇県〇〇市...">
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">顧客連絡先</label>
-        <input class="form-input" type="text" id="f-customerContact" placeholder="電話番号など">
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">対応業者名・連絡先</label>
-        <input class="form-input" type="text" id="f-vendorInfo" placeholder="業者名・電話番号など">
       </div>
 
       <div class="form-group">
@@ -48,44 +43,56 @@
         <input class="form-input" type="text" id="f-salesRepName" placeholder="紹介元（ハウスメーカー等）の営業担当者名">
       </div>
 
-      <div class="form-section-title">日程・金額</div>
+      <div class="form-hint new-only">その他の項目（連絡先・業者情報・日程・金額・備考など）は、登録後に詳細画面から入力できます。</div>
 
-      <div class="form-group">
+      <div class="form-group full-only">
+        <label class="form-label">顧客連絡先</label>
+        <input class="form-input" type="text" id="f-customerContact" placeholder="電話番号など">
+      </div>
+
+      <div class="form-group full-only">
+        <label class="form-label">対応業者名・連絡先</label>
+        <input class="form-input" type="text" id="f-vendorInfo" placeholder="業者名・電話番号など">
+      </div>
+
+      <div class="form-section-title full-only">日程・金額</div>
+
+      <div class="form-group full-only">
         <label class="form-label">現地立会い予定日時</label>
         <input class="form-input" type="text" id="f-siteVisitAt" placeholder="例：7/20(月) 10:00〜">
       </div>
 
-      <div class="form-group">
+      <div class="form-group full-only">
         <label class="form-label">着工予定日</label>
         <input class="form-input" type="date" id="f-startDate">
       </div>
 
-      <div class="form-group">
+      <div class="form-group full-only">
         <label class="form-label">完工予定日</label>
         <input class="form-input" type="date" id="f-completionDate">
       </div>
 
-      <div class="form-group">
+      <div class="form-group full-only">
         <label class="form-label">金額</label>
         <input class="form-input" type="text" id="f-amount" placeholder="例：1,500,000円（合計額のメモ）">
       </div>
 
-      <div class="form-section-title">ステータス</div>
+      <div class="form-section-title full-only">ステータス</div>
 
-      <div class="form-group">
+      <div class="form-group full-only">
         <label class="form-label">現在のステータス</label>
         <select class="form-select" id="f-status"></select>
       </div>
 
-      <div class="form-section-title">備考</div>
+      <div class="form-section-title full-only">備考</div>
 
-      <div class="form-group">
+      <div class="form-group full-only">
         <textarea class="form-textarea" id="f-notes" placeholder="自由に記入してください"></textarea>
       </div>
 
-      <div class="form-section-title">次のアクション予定</div>
+      <div class="form-section-title full-only">次のアクション予定</div>
 
-      <div class="form-group">
+      <div class="form-group full-only">
         <label class="form-label">次にやるべきアクションの予定日時</label>
         <input class="form-input" type="datetime-local" id="f-nextActionAt">
         <div class="form-hint">将来のリマインダー・LINE通知機能のための項目です。今は表示のみで通知は行われません。</div>
