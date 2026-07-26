@@ -24,8 +24,13 @@
       <div class="form-section-title">基本情報</div>
 
       <div class="form-group">
-        <label class="form-label">現場名／顧客名<span class="required">必須</span></label>
+        <label class="form-label">現場名<span class="required">必須</span></label>
         <input class="form-input" type="text" id="f-siteName" placeholder="例：田中様邸 木造2階解体" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">顧客名</label>
+        <input class="form-input" type="text" id="f-customerName" placeholder="請求書に記載する名義">
       </div>
 
       <div class="form-group">
@@ -38,39 +43,81 @@
         <input class="form-input" type="text" id="f-address" placeholder="例：〇〇県〇〇市...">
       </div>
 
+      <div class="form-section-title">現地写真</div>
       <div class="form-group">
-        <label class="form-label">注文住宅営業担当者名</label>
-        <input class="form-input" type="text" id="f-salesRepName" placeholder="紹介元（ハウスメーカー等）の営業担当者名">
+        <label class="form-label">現地写真（複数選択可）</label>
+        <input class="form-input" type="file" id="f-sitePhotos" accept="image/*" multiple>
+        <div class="form-hint">現地を特定するための写真です。Googleマップのスクショ等でも可。</div>
+        <div class="file-preview-list" id="site-photos-list"></div>
       </div>
 
-      <div class="form-hint new-only">その他の項目（連絡先・業者情報・日程・金額・備考など）は、登録後に詳細画面から入力できます。</div>
+      <div class="form-section-title">現地確認</div>
 
-      <div class="form-group full-only">
-        <label class="form-label">顧客連絡先</label>
-        <input class="form-input" type="text" id="f-customerContact" placeholder="電話番号など">
+      <div class="form-group">
+        <label class="form-label">現地確認日候補1</label>
+        <input class="form-input" type="date" id="f-siteVisitCandidate1">
+      </div>
+      <div class="form-group">
+        <label class="form-label">現地確認日候補2</label>
+        <input class="form-input" type="date" id="f-siteVisitCandidate2">
+      </div>
+      <div class="form-group">
+        <label class="form-label">現地確認日候補3</label>
+        <input class="form-input" type="date" id="f-siteVisitCandidate3">
+        <div class="form-hint">藤村さんに現地確認に行ってほしい希望日です（顧客への提示日ではありません）。</div>
       </div>
 
       <div class="form-group full-only">
-        <label class="form-label">対応業者名・連絡先</label>
-        <input class="form-input" type="text" id="f-vendorInfo" placeholder="業者名・電話番号など">
+        <label class="form-label">現地確認 確定日</label>
+        <input class="form-input" type="date" id="f-siteVisitConfirmedDate">
+        <div class="form-hint" id="legacy-site-visit-hint" style="display:none"></div>
       </div>
 
-      <div class="form-section-title full-only">日程・金額</div>
+      <div class="form-section-title">営業担当・日程</div>
 
-      <div class="form-group full-only">
-        <label class="form-label">現地立会い予定日時</label>
-        <input class="form-input" type="text" id="f-siteVisitAt" placeholder="例：7/20(月) 10:00〜">
+      <div class="form-group">
+        <label class="form-label">営業担当</label>
+        <input class="form-input" type="text" id="f-salesRepName" placeholder="紹介元（注文住宅の営業担当者名）">
       </div>
 
-      <div class="form-group full-only">
+      <div class="form-group">
         <label class="form-label">着工予定日</label>
         <input class="form-input" type="date" id="f-startDate">
       </div>
 
-      <div class="form-group full-only">
+      <div class="form-group">
         <label class="form-label">完工予定日</label>
         <input class="form-input" type="date" id="f-completionDate">
       </div>
+
+      <div class="form-group">
+        <label class="form-label">予算希望</label>
+        <input class="form-input" type="text" id="f-budget" placeholder="あれば入力（任意）">
+      </div>
+
+      <div class="form-section-title">添付資料</div>
+      <div class="form-group">
+        <label class="form-label">添付資料（複数選択可）</label>
+        <input class="form-input" type="file" id="f-attachments" multiple>
+        <div class="form-hint">建物謄本、測量図、間取り図など。</div>
+        <div class="file-preview-list" id="attachments-list"></div>
+      </div>
+
+      <div class="form-hint new-only">顧客連絡先・対応業者名・金額・備考などは、登録後に詳細画面から入力できます。</div>
+
+      <div class="form-section-title full-only">連絡先・業者情報</div>
+
+      <div class="form-group full-only">
+        <label class="form-label">顧客連絡先</label>
+        <input class="form-input" type="text" id="f-customerContact" placeholder="電話番号など（任意）">
+      </div>
+
+      <div class="form-group full-only">
+        <label class="form-label">対応業者名・連絡先</label>
+        <input class="form-input" type="text" id="f-vendorInfo" placeholder="業者名・電話番号など（任意）">
+      </div>
+
+      <div class="form-section-title full-only">金額</div>
 
       <div class="form-group full-only">
         <label class="form-label">金額</label>
@@ -87,7 +134,7 @@
       <div class="form-section-title full-only">備考</div>
 
       <div class="form-group full-only">
-        <textarea class="form-textarea" id="f-notes" placeholder="自由に記入してください"></textarea>
+        <textarea class="form-textarea" id="f-notes" placeholder="自由に記入してください（任意）"></textarea>
       </div>
 
       <div class="form-section-title full-only">次のアクション予定</div>
@@ -116,6 +163,7 @@
   <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
   <script src="js/config.js"></script>
   <script src="js/case.js"></script>
 </body>

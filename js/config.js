@@ -41,6 +41,31 @@ if (typeof firebase !== 'undefined' && !firebase.apps.length) {
   firebase.initializeApp(FIREBASE_CONFIG);
 }
 const db = typeof firebase !== 'undefined' ? firebase.firestore() : null;
+const storage = (typeof firebase !== 'undefined' && firebase.storage) ? firebase.storage() : null;
+
+// ===== ファイルアップロード =====
+
+// 複数ファイルをFirebase Storageにアップロードし、{name, url, path}の配列を返す
+async function uploadFiles(fileList, caseId, folder) {
+  const results = [];
+  for (const file of Array.from(fileList)) {
+    const path = `demolitionCases/${caseId}/${folder}/${Date.now()}_${file.name}`;
+    const ref = storage.ref(path);
+    await ref.put(file);
+    const url = await ref.getDownloadURL();
+    results.push({ name: file.name, url, path });
+  }
+  return results;
+}
+
+async function deleteStorageFile(path) {
+  if (!path) return;
+  try {
+    await storage.ref(path).delete();
+  } catch (e) {
+    console.error('ファイル削除エラー:', e);
+  }
+}
 
 // ===== ユーティリティ =====
 

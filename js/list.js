@@ -62,20 +62,32 @@
   function renderCaseCard(c) {
     const status = getStatusInfo(c.status);
     const rows = [];
+    if (c.customerName) rows.push(fieldRow('顧客名', escapeHtml(c.customerName)));
     if (c.address) rows.push(fieldRow('住所', escapeHtml(c.address)));
     if (c.salesRepName) rows.push(fieldRow('営業担当', escapeHtml(c.salesRepName)));
     if (c.inquiryReceivedDate) rows.push(fieldRow('受注日', formatDateJP(c.inquiryReceivedDate)));
     if (c.customerContact) rows.push(fieldRow('連絡先', escapeHtml(c.customerContact)));
     if (c.vendorInfo) rows.push(fieldRow('業者', escapeHtml(c.vendorInfo)));
-    if (c.siteVisitAt) rows.push(fieldRow('現地立会い', escapeHtml(c.siteVisitAt)));
+
+    const siteVisitCandidates = (c.siteVisitCandidates || []).filter(Boolean);
+    if (c.siteVisitConfirmedDate) {
+      rows.push(fieldRow('現地確認確定日', formatDateJP(c.siteVisitConfirmedDate)));
+    } else if (siteVisitCandidates.length) {
+      rows.push(fieldRow('現地確認候補日', formatDateJP(siteVisitCandidates[0])));
+    } else if (c.siteVisitAt) {
+      rows.push(fieldRow('現地立会い（旧）', escapeHtml(c.siteVisitAt)));
+    }
+
     if (c.startDate) rows.push(fieldRow('着工予定', formatDateJP(c.startDate)));
     if (c.completionDate) rows.push(fieldRow('完工予定', formatDateJP(c.completionDate)));
+
+    const amountLabel = c.amount ? escapeHtml(String(c.amount)) : (c.budget ? `予算希望：${escapeHtml(String(c.budget))}` : '');
 
     return `
       <div class="case-card" style="--status-color:${status.color}" data-case-id="${c.id}">
         <div class="case-card-header">
           <span class="case-card-name">${escapeHtml(c.siteName || '(名称未設定)')}</span>
-          ${c.amount ? `<span class="case-card-amount">${escapeHtml(String(c.amount))}</span>` : ''}
+          ${amountLabel ? `<span class="case-card-amount">${amountLabel}</span>` : ''}
         </div>
         <div class="case-card-body">${rows.join('') || '<div class="case-field-row"><span class="case-field-label">詳細未入力</span></div>'}</div>
       </div>`;

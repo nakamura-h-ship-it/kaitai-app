@@ -298,3 +298,20 @@ body {
 .confirm-message { font-size: 15px; margin-bottom: 20px; text-align: center; line-height: 1.6; }
 .confirm-actions { display: flex; gap: 10px; }
 .confirm-actions .btn { margin-bottom: 0; }
+
+/* ===== ファイルプレビュー（現地写真・添付資料） ===== */
+.file-preview-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.file-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--primary-light);
+  color: var(--primary);
+  padding: 6px 10px;
+  border-radius: 14px;
+  font-size: 12px;
+  max-width: 100%;
+}
+.file-chip a { color: inherit; text-decoration: underline; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 180px; }
+.file-chip-staged { background: #FFF3E0; color: #E65100; }
+.file-chip-remove { background: none; border: none; color: inherit; font-weight: 700; cursor: pointer; font-size: 14px; line-height: 1; padding: 0; }
