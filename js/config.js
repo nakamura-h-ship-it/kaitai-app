@@ -16,6 +16,10 @@ const FIREBASE_CONFIG = {
 
 const CASES_COLLECTION = 'demolitionCases';
 
+// ===== Cloudinary 設定（現地写真・添付資料のアップロード先） =====
+const CLOUDINARY_CLOUD_NAME = 'sl2wom6k';
+const CLOUDINARY_UPLOAD_PRESET = 'demolition_unsigned';
+
 // ===== ステータス定義 =====
 // key: Firestoreのstatusフィールド値。順番は業務フローの順番と一致させること
 const STATUSES = [
@@ -41,30 +45,26 @@ if (typeof firebase !== 'undefined' && !firebase.apps.length) {
   firebase.initializeApp(FIREBASE_CONFIG);
 }
 const db = typeof firebase !== 'undefined' ? firebase.firestore() : null;
-const storage = (typeof firebase !== 'undefined' && firebase.storage) ? firebase.storage() : null;
 
-// ===== ファイルアップロード =====
+// ===== ファイルアップロード（Cloudinary・unsigned upload preset） =====
 
-// 複数ファイルをFirebase Storageにアップロードし、{name, url, path}の配列を返す
-async function uploadFiles(fileList, caseId, folder) {
+// 複数ファイルをCloudinaryにアップロードし、{name, url, publicId}の配列を返す
+async function uploadFiles(fileList) {
   const results = [];
   for (const file of Array.from(fileList)) {
-    const path = `demolitionCases/${caseId}/${folder}/${Date.now()}_${file.name}`;
-    const ref = storage.ref(path);
-    await ref.put(file);
-    const url = await ref.getDownloadURL();
-    results.push({ name: file.name, url, path });
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/auto/upload`, {
+      method: 'POST',
+      body: formData,
+    });
+    if (!res.ok) throw new Error(`Cloudinaryへのアップロードに失敗しました（${file.name}）`);
+    const data = await res.json();
+    results.push({ name: file.name, url: data.secure_url, publicId: data.public_id });
   }
   return results;
-}
-
-async function deleteStorageFile(path) {
-  if (!path) return;
-  try {
-    await storage.ref(path).delete();
-  } catch (e) {
-    console.error('ファイル削除エラー:', e);
-  }
 }
 
 // ===== ユーティリティ =====

@@ -127,21 +127,22 @@
     await deleteExistingFile(index, currentAttachments, 'attachments', 'attachments-list', 'f-attachments');
   }
 
+  // Cloudinaryのunsigned upload preset経由では実ファイルの削除ができないため、
+  // Firestore側の参照を外すのみ（Cloudinary上のファイル自体は残る）
   async function deleteExistingFile(index, filesArray, fieldName, listElId, inputElId) {
     const file = filesArray[index];
     if (!file) return;
     try {
-      await deleteStorageFile(file.path);
       await db.collection(CASES_COLLECTION).doc(caseId).update({
         [fieldName]: firebase.firestore.FieldValue.arrayRemove(file),
       });
       filesArray.splice(index, 1);
       const onDelete = fieldName === 'sitePhotos' ? deleteSitePhoto : deleteAttachment;
       renderStagedFiles(document.getElementById(inputElId), listElId, filesArray, onDelete);
-      showToast('ファイルを削除しました');
+      showToast('一覧から外しました');
     } catch (e) {
       console.error('ファイル削除エラー:', e);
-      showToast('ファイルの削除に失敗しました');
+      showToast('削除に失敗しました');
     }
   }
 
@@ -190,19 +191,19 @@
           updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
         });
         if (newSitePhotoFiles && newSitePhotoFiles.length) {
-          const uploaded = await uploadFiles(newSitePhotoFiles, caseId, 'sitePhotos');
+          const uploaded = await uploadFiles(newSitePhotoFiles);
           update.sitePhotos = firebase.firestore.FieldValue.arrayUnion(...uploaded);
         }
         if (newAttachmentFiles && newAttachmentFiles.length) {
-          const uploaded = await uploadFiles(newAttachmentFiles, caseId, 'attachments');
+          const uploaded = await uploadFiles(newAttachmentFiles);
           update.attachments = firebase.firestore.FieldValue.arrayUnion(...uploaded);
         }
         await db.collection(CASES_COLLECTION).doc(caseId).update(update);
         showToast('保存しました ✓');
       } else {
         const docRef = db.collection(CASES_COLLECTION).doc();
-        const sitePhotos = newSitePhotoFiles && newSitePhotoFiles.length ? await uploadFiles(newSitePhotoFiles, docRef.id, 'sitePhotos') : [];
-        const attachments = newAttachmentFiles && newAttachmentFiles.length ? await uploadFiles(newAttachmentFiles, docRef.id, 'attachments') : [];
+        const sitePhotos = newSitePhotoFiles && newSitePhotoFiles.length ? await uploadFiles(newSitePhotoFiles) : [];
+        const attachments = newAttachmentFiles && newAttachmentFiles.length ? await uploadFiles(newAttachmentFiles) : [];
         await docRef.set(Object.assign({}, values, {
           sitePhotos,
           attachments,
@@ -225,9 +226,6 @@
 
   async function onDelete() {
     try {
-      await Promise.all(
-        [...currentSitePhotos, ...currentAttachments].map(f => deleteStorageFile(f.path))
-      );
       await db.collection(CASES_COLLECTION).doc(caseId).delete();
       showToast('削除しました');
       location.href = 'index.html';
