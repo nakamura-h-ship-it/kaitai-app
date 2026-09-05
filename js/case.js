@@ -23,6 +23,9 @@
     document.getElementById('f-sitePhotos').addEventListener('change', (e) => renderStagedFiles(e.target, 'site-photos-list', currentSitePhotos, isEditMode ? deleteSitePhoto : null));
     document.getElementById('f-attachments').addEventListener('change', (e) => renderStagedFiles(e.target, 'attachments-list', currentAttachments, isEditMode ? deleteAttachment : null));
 
+    document.getElementById('f-cost').addEventListener('input', updateGrossProfit);
+    document.getElementById('f-customerAmount').addEventListener('input', updateGrossProfit);
+
     if (isEditMode) {
       loadCase();
     } else {
@@ -30,6 +33,17 @@
       document.getElementById('f-inquiryReceivedDate').value = getTodayString();
       showForm();
     }
+  }
+
+  function updateGrossProfit() {
+    const cost = parseFloat(document.getElementById('f-cost').value);
+    const customerAmount = parseFloat(document.getElementById('f-customerAmount').value);
+    const grossProfitEl = document.getElementById('f-grossProfit');
+    if (isNaN(cost) || isNaN(customerAmount)) {
+      grossProfitEl.value = '';
+      return;
+    }
+    grossProfitEl.value = `${(customerAmount - cost).toLocaleString('ja-JP')}円`;
   }
 
   function populateStatusOptions() {
@@ -61,20 +75,13 @@
       const candidates = c.siteVisitCandidates || [];
       document.getElementById('f-siteVisitCandidate1').value = candidates[0] || '';
       document.getElementById('f-siteVisitCandidate2').value = candidates[1] || '';
-      document.getElementById('f-siteVisitCandidate3').value = candidates[2] || '';
-      document.getElementById('f-siteVisitConfirmedDate').value = c.siteVisitConfirmedDate || '';
-      if (c.siteVisitAt && !c.siteVisitConfirmedDate) {
-        const hint = document.getElementById('legacy-site-visit-hint');
-        hint.textContent = `（旧データ）現地立会い予定日時：${c.siteVisitAt}`;
-        hint.style.display = 'block';
-      }
       document.getElementById('f-startDate').value = c.startDate || '';
       document.getElementById('f-completionDate').value = c.completionDate || '';
-      document.getElementById('f-budget').value = c.budget || '';
-      document.getElementById('f-amount').value = c.amount || '';
+      document.getElementById('f-cost').value = c.cost != null ? c.cost : '';
+      document.getElementById('f-customerAmount').value = c.customerAmount != null ? c.customerAmount : '';
+      updateGrossProfit();
       document.getElementById('f-status').value = c.status || STATUSES[0].key;
       document.getElementById('f-notes').value = c.notes || '';
-      document.getElementById('f-nextActionAt').value = c.nextActionAt || '';
 
       currentSitePhotos = c.sitePhotos || [];
       currentAttachments = c.attachments || [];
@@ -158,16 +165,24 @@
       siteVisitCandidates: [
         document.getElementById('f-siteVisitCandidate1').value,
         document.getElementById('f-siteVisitCandidate2').value,
-        document.getElementById('f-siteVisitCandidate3').value,
       ],
-      siteVisitConfirmedDate: document.getElementById('f-siteVisitConfirmedDate').value,
       startDate: document.getElementById('f-startDate').value,
       completionDate: document.getElementById('f-completionDate').value,
-      budget: document.getElementById('f-budget').value.trim(),
-      amount: document.getElementById('f-amount').value.trim(),
+      ...collectAmountValues(),
       status: document.getElementById('f-status').value,
       notes: document.getElementById('f-notes').value.trim(),
-      nextActionAt: document.getElementById('f-nextActionAt').value,
+    };
+  }
+
+  function collectAmountValues() {
+    const costRaw = document.getElementById('f-cost').value;
+    const customerAmountRaw = document.getElementById('f-customerAmount').value;
+    const cost = costRaw === '' ? null : parseFloat(costRaw);
+    const customerAmount = customerAmountRaw === '' ? null : parseFloat(customerAmountRaw);
+    return {
+      cost,
+      customerAmount,
+      grossProfit: (cost != null && customerAmount != null) ? (customerAmount - cost) : null,
     };
   }
 

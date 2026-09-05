@@ -60,17 +60,7 @@
       <div class="form-group">
         <label class="form-label">現地確認日候補2</label>
         <input class="form-input" type="date" id="f-siteVisitCandidate2">
-      </div>
-      <div class="form-group">
-        <label class="form-label">現地確認日候補3</label>
-        <input class="form-input" type="date" id="f-siteVisitCandidate3">
         <div class="form-hint">藤村さんに現地確認に行ってほしい希望日です（顧客への提示日ではありません）。</div>
-      </div>
-
-      <div class="form-group full-only">
-        <label class="form-label">現地確認 確定日</label>
-        <input class="form-input" type="date" id="f-siteVisitConfirmedDate">
-        <div class="form-hint" id="legacy-site-visit-hint" style="display:none"></div>
       </div>
 
       <div class="form-section-title">営業担当・日程</div>
@@ -88,11 +78,6 @@
       <div class="form-group">
         <label class="form-label">完工予定日</label>
         <input class="form-input" type="date" id="f-completionDate">
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">予算希望</label>
-        <input class="form-input" type="text" id="f-budget" placeholder="あれば入力（任意）">
       </div>
 
       <div class="form-section-title">添付資料</div>
@@ -120,8 +105,19 @@
       <div class="form-section-title full-only">金額</div>
 
       <div class="form-group full-only">
-        <label class="form-label">金額</label>
-        <input class="form-input" type="text" id="f-amount" placeholder="例：1,500,000円（合計額のメモ）">
+        <label class="form-label">原価</label>
+        <input class="form-input" type="number" id="f-cost" placeholder="業者への支払額（円）">
+      </div>
+
+      <div class="form-group full-only">
+        <label class="form-label">客出</label>
+        <input class="form-input" type="number" id="f-customerAmount" placeholder="顧客への請求額（円）">
+      </div>
+
+      <div class="form-group full-only">
+        <label class="form-label">粗利</label>
+        <input class="form-input" type="text" id="f-grossProfit" disabled>
+        <div class="form-hint">客出−原価で自動計算されます。</div>
       </div>
 
       <div class="form-section-title full-only">ステータス</div>
@@ -135,14 +131,6 @@
 
       <div class="form-group full-only">
         <textarea class="form-textarea" id="f-notes" placeholder="自由に記入してください（任意）"></textarea>
-      </div>
-
-      <div class="form-section-title full-only">次のアクション予定</div>
-
-      <div class="form-group full-only">
-        <label class="form-label">次にやるべきアクションの予定日時</label>
-        <input class="form-input" type="datetime-local" id="f-nextActionAt">
-        <div class="form-hint">将来のリマインダー・LINE通知機能のための項目です。今は表示のみで通知は行われません。</div>
       </div>
 
       <button type="submit" class="btn btn-primary" id="save-btn">保存する</button>

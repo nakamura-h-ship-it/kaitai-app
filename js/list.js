@@ -81,7 +81,9 @@
     if (c.startDate) rows.push(fieldRow('着工予定', formatDateJP(c.startDate)));
     if (c.completionDate) rows.push(fieldRow('完工予定', formatDateJP(c.completionDate)));
 
-    const amountLabel = c.amount ? escapeHtml(String(c.amount)) : (c.budget ? `予算希望：${escapeHtml(String(c.budget))}` : '');
+    const amountLabel = c.customerAmount != null
+      ? `${Number(c.customerAmount).toLocaleString('ja-JP')}円`
+      : (c.amount ? escapeHtml(String(c.amount)) : (c.budget ? `予算希望：${escapeHtml(String(c.budget))}` : ''));
 
     return `
       <div class="case-card" style="--status-color:${status.color}" data-case-id="${c.id}">
