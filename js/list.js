@@ -18,6 +18,7 @@
       snapshot.forEach(doc => casesCache.push(Object.assign({ id: doc.id }, doc.data())));
       renderTabs();
       renderList();
+      renderGrossProfitSummary();
     } catch (e) {
       console.error('案件取得エラー:', e);
       listEl.innerHTML = '<div class="empty-state"><div class="empty-text">データを取得できませんでした</div></div>';
@@ -81,9 +82,9 @@
     if (c.startDate) rows.push(fieldRow('着工予定', formatDateJP(c.startDate)));
     if (c.completionDate) rows.push(fieldRow('完工予定', formatDateJP(c.completionDate)));
 
-    const amountLabel = c.customerAmount != null
-      ? `${Number(c.customerAmount).toLocaleString('ja-JP')}円`
-      : (c.amount ? escapeHtml(String(c.amount)) : (c.budget ? `予算希望：${escapeHtml(String(c.budget))}` : ''));
+    const amountLabel = typeof c.grossProfit === 'number'
+      ? `粗利 ${c.grossProfit.toLocaleString('ja-JP')}円`
+      : '';
 
     return `
       <div class="case-card" style="--status-color:${status.color}" data-case-id="${c.id}">
@@ -93,6 +94,12 @@
         </div>
         <div class="case-card-body">${rows.join('') || '<div class="case-field-row"><span class="case-field-label">詳細未入力</span></div>'}</div>
       </div>`;
+  }
+
+  function renderGrossProfitSummary() {
+    const summaryEl = document.getElementById('gross-profit-summary');
+    const total = casesCache.reduce((sum, c) => sum + (typeof c.grossProfit === 'number' ? c.grossProfit : 0), 0);
+    summaryEl.innerHTML = `<span class="gross-profit-summary-label">粗利合計</span><span class="gross-profit-summary-value">${total.toLocaleString('ja-JP')}円</span>`;
   }
 
   function fieldRow(label, value) {

@@ -59,6 +59,22 @@ body {
   padding: 16px;
 }
 
+/* ===== Gross Profit Summary ===== */
+.gross-profit-summary {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 8px;
+  background: var(--primary-dark);
+  color: white;
+  padding: 8px 16px;
+  position: sticky;
+  top: 53px;
+  z-index: 91;
+}
+.gross-profit-summary-label { font-size: 12px; font-weight: 700; opacity: 0.85; }
+.gross-profit-summary-value { font-size: 17px; font-weight: 700; }
+
 /* ===== Status Tabs ===== */
 .status-tabs {
   display: flex;
@@ -66,7 +82,7 @@ body {
   background: white;
   border-bottom: 2px solid var(--border);
   position: sticky;
-  top: 53px;
+  top: 89px;
   z-index: 90;
 }
 .status-tab-btn {
