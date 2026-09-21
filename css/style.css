@@ -156,6 +156,24 @@ body {
 .case-field-label { color: var(--text-muted); white-space: nowrap; }
 .case-field-value { font-weight: 600; text-align: right; }
 
+.case-card-footer {
+  padding: 0 16px 12px;
+  display: flex;
+  justify-content: flex-end;
+}
+.case-lost-btn {
+  background: var(--card);
+  color: var(--text-muted);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+}
+.case-lost-btn:hover { background: var(--danger-bg); color: var(--danger); border-color: var(--danger); }
+
 /* ===== FAB ===== */
 .fab {
   position: fixed;

@@ -58,6 +58,12 @@
         location.href = `case.html?id=${encodeURIComponent(card.dataset.caseId)}`;
       });
     });
+    listEl.querySelectorAll('[data-lost-id]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        markAsLost(btn.dataset.lostId);
+      });
+    });
   }
 
   function renderCaseCard(c) {
@@ -86,6 +92,10 @@
       ? `粗利 ${c.grossProfit.toLocaleString('ja-JP')}円`
       : '';
 
+    const lostBtn = c.status !== LOST_STATUS_KEY
+      ? `<button type="button" class="case-lost-btn" data-lost-id="${c.id}">没にする</button>`
+      : '';
+
     return `
       <div class="case-card" style="--status-color:${status.color}" data-case-id="${c.id}">
         <div class="case-card-header">
@@ -93,12 +103,34 @@
           ${amountLabel ? `<span class="case-card-amount">${amountLabel}</span>` : ''}
         </div>
         <div class="case-card-body">${rows.join('') || '<div class="case-field-row"><span class="case-field-label">詳細未入力</span></div>'}</div>
+        ${lostBtn ? `<div class="case-card-footer">${lostBtn}</div>` : ''}
       </div>`;
+  }
+
+  async function markAsLost(caseId) {
+    if (!confirm('この案件を「没」にしますか？')) return;
+    try {
+      await db.collection(CASES_COLLECTION).doc(caseId).update({
+        status: LOST_STATUS_KEY,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+      const c = casesCache.find(x => x.id === caseId);
+      if (c) c.status = LOST_STATUS_KEY;
+      renderTabs();
+      renderList();
+      renderGrossProfitSummary();
+      showToast('没にしました');
+    } catch (e) {
+      console.error('更新エラー:', e);
+      showToast('更新に失敗しました');
+    }
   }
 
   function renderGrossProfitSummary() {
     const summaryEl = document.getElementById('gross-profit-summary');
-    const total = casesCache.reduce((sum, c) => sum + (typeof c.grossProfit === 'number' ? c.grossProfit : 0), 0);
+    const total = casesCache
+      .filter(c => c.status !== LOST_STATUS_KEY)
+      .reduce((sum, c) => sum + (typeof c.grossProfit === 'number' ? c.grossProfit : 0), 0);
     summaryEl.innerHTML = `<span class="gross-profit-summary-label">粗利合計</span><span class="gross-profit-summary-value">${total.toLocaleString('ja-JP')}円</span>`;
   }
 

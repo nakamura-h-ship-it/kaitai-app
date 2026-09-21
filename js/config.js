@@ -30,7 +30,11 @@ const STATUSES = [
   { key: 'waitingStart', label: '着工待ち',         color: '#AD1457' },
   { key: 'inProgress',   label: '着工中',           color: '#C62828' },
   { key: 'completed',    label: '完工',             color: '#2E7D32' },
+  { key: 'lost',         label: '没',               color: '#757575' },
 ];
+
+// 粗利合計から除外するステータス
+const LOST_STATUS_KEY = 'lost';
 
 function getStatusInfo(key) {
   return STATUSES.find(s => s.key === key) || STATUSES[0];
