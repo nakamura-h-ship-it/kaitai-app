@@ -76,15 +76,6 @@
     if (c.customerContact) rows.push(fieldRow('連絡先', escapeHtml(c.customerContact)));
     if (c.vendorInfo) rows.push(fieldRow('業者', escapeHtml(c.vendorInfo)));
 
-    const siteVisitCandidates = (c.siteVisitCandidates || []).filter(Boolean);
-    if (c.siteVisitConfirmedDate) {
-      rows.push(fieldRow('現地確認確定日', formatDateJP(c.siteVisitConfirmedDate)));
-    } else if (siteVisitCandidates.length) {
-      rows.push(fieldRow('現地確認候補日', formatDateJP(siteVisitCandidates[0])));
-    } else if (c.siteVisitAt) {
-      rows.push(fieldRow('現地立会い（旧）', escapeHtml(c.siteVisitAt)));
-    }
-
     if (c.startDate) rows.push(fieldRow('着工予定', formatDateJP(c.startDate)));
     if (c.completionDate) rows.push(fieldRow('完工予定', formatDateJP(c.completionDate)));
 

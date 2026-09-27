@@ -72,9 +72,6 @@
       document.getElementById('f-customerContact').value = c.customerContact || '';
       document.getElementById('f-vendorInfo').value = c.vendorInfo || '';
       document.getElementById('f-salesRepName').value = c.salesRepName || '';
-      const candidates = c.siteVisitCandidates || [];
-      document.getElementById('f-siteVisitCandidate1').value = candidates[0] || '';
-      document.getElementById('f-siteVisitCandidate2').value = candidates[1] || '';
       document.getElementById('f-startDate').value = c.startDate || '';
       document.getElementById('f-completionDate').value = c.completionDate || '';
       document.getElementById('f-cost').value = c.cost != null ? c.cost : '';
@@ -162,10 +159,6 @@
       customerContact: document.getElementById('f-customerContact').value.trim(),
       vendorInfo: document.getElementById('f-vendorInfo').value.trim(),
       salesRepName: document.getElementById('f-salesRepName').value.trim(),
-      siteVisitCandidates: [
-        document.getElementById('f-siteVisitCandidate1').value,
-        document.getElementById('f-siteVisitCandidate2').value,
-      ],
       startDate: document.getElementById('f-startDate').value,
       completionDate: document.getElementById('f-completionDate').value,
       ...collectAmountValues(),
