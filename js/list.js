@@ -15,7 +15,12 @@
     try {
       const snapshot = await db.collection(CASES_COLLECTION).get();
       casesCache = [];
-      snapshot.forEach(doc => casesCache.push(Object.assign({ id: doc.id }, doc.data())));
+      snapshot.forEach(doc => {
+        const c = Object.assign({ id: doc.id }, doc.data());
+        // 廃止したステータス（業者へ依頼中など）の案件は先頭タブに表示する
+        c.status = getStatusInfo(c.status).key;
+        casesCache.push(c);
+      });
       renderTabs();
       renderList();
       renderGrossProfitSummary();
@@ -58,10 +63,10 @@
         location.href = `case.html?id=${encodeURIComponent(card.dataset.caseId)}`;
       });
     });
-    listEl.querySelectorAll('[data-lost-id]').forEach(btn => {
+    listEl.querySelectorAll('[data-status-case-id]').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
-        markAsLost(btn.dataset.lostId);
+        changeStatus(btn.dataset.statusCaseId, btn.dataset.status);
       });
     });
   }
@@ -83,9 +88,10 @@
       ? `粗利 ${c.grossProfit.toLocaleString('ja-JP')}円`
       : '';
 
-    const lostBtn = c.status !== LOST_STATUS_KEY
-      ? `<button type="button" class="case-lost-btn" data-lost-id="${c.id}">没にする</button>`
-      : '';
+    const statusChips = STATUSES.map(s => {
+      const active = s.key === c.status;
+      return `<button type="button" class="case-status-chip ${active ? 'active' : ''}" style="--chip-color:${s.color}" data-status-case-id="${c.id}" data-status="${s.key}" ${active ? 'disabled' : ''}>${s.label}</button>`;
+    }).join('');
 
     return `
       <div class="case-card" style="--status-color:${status.color}" data-case-id="${c.id}">
@@ -94,23 +100,24 @@
           ${amountLabel ? `<span class="case-card-amount">${amountLabel}</span>` : ''}
         </div>
         <div class="case-card-body">${rows.join('') || '<div class="case-field-row"><span class="case-field-label">詳細未入力</span></div>'}</div>
-        ${lostBtn ? `<div class="case-card-footer">${lostBtn}</div>` : ''}
+        <div class="case-card-footer">${statusChips}</div>
       </div>`;
   }
 
-  async function markAsLost(caseId) {
-    if (!confirm('この案件を「没」にしますか？')) return;
+  async function changeStatus(caseId, statusKey) {
+    const status = getStatusInfo(statusKey);
+    if (statusKey === LOST_STATUS_KEY && !confirm('この案件を「没」にしますか？')) return;
     try {
       await db.collection(CASES_COLLECTION).doc(caseId).update({
-        status: LOST_STATUS_KEY,
+        status: status.key,
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       });
       const c = casesCache.find(x => x.id === caseId);
-      if (c) c.status = LOST_STATUS_KEY;
+      if (c) c.status = status.key;
       renderTabs();
       renderList();
       renderGrossProfitSummary();
-      showToast('没にしました');
+      showToast(`「${status.label}」に移動しました`);
     } catch (e) {
       console.error('更新エラー:', e);
       showToast('更新に失敗しました');

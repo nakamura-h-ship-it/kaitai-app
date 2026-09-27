@@ -77,7 +77,7 @@
       document.getElementById('f-cost').value = c.cost != null ? c.cost : '';
       document.getElementById('f-customerAmount').value = c.customerAmount != null ? c.customerAmount : '';
       updateGrossProfit();
-      document.getElementById('f-status').value = c.status || STATUSES[0].key;
+      document.getElementById('f-status').value = getStatusInfo(c.status).key;
       document.getElementById('f-notes').value = c.notes || '';
 
       currentSitePhotos = c.sitePhotos || [];

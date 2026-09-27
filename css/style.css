@@ -159,20 +159,28 @@ body {
 .case-card-footer {
   padding: 0 16px 12px;
   display: flex;
-  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 6px;
 }
-.case-lost-btn {
+.case-status-chip {
   background: var(--card);
   color: var(--text-muted);
   border: 2px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 6px 12px;
-  font-size: 12px;
+  border-radius: 14px;
+  padding: 4px 10px;
+  font-size: 11px;
   font-weight: 700;
   font-family: inherit;
   cursor: pointer;
+  white-space: nowrap;
 }
-.case-lost-btn:hover { background: var(--danger-bg); color: var(--danger); border-color: var(--danger); }
+.case-status-chip:hover { color: var(--chip-color); border-color: var(--chip-color); }
+.case-status-chip.active {
+  background: var(--chip-color);
+  color: white;
+  border-color: var(--chip-color);
+  cursor: default;
+}
 
 /* ===== FAB ===== */
 .fab {

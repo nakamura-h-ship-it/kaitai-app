@@ -24,7 +24,6 @@ const CLOUDINARY_UPLOAD_PRESET = 'demolition_unsigned';
 // key: Firestoreのstatusフィールド値。順番は業務フローの順番と一致させること
 const STATUSES = [
   { key: 'inquiry',      label: '見積もり依頼受付', color: '#1565C0' },
-  { key: 'requesting',   label: '業者へ依頼中',     color: '#00838F' },
   { key: 'siteVisit',    label: '現地立会い待ち',   color: '#6A1B9A' },
   { key: 'quoted',       label: '金額回答済み',     color: '#E65100' },
   { key: 'waitingStart', label: '着工待ち',         color: '#AD1457' },
