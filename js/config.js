@@ -35,6 +35,13 @@ const STATUSES = [
 // 粗利合計から除外するステータス
 const LOST_STATUS_KEY = 'lost';
 
+// ===== カレンダーに自動表示する日付項目 =====
+// field: 案件データの日付フィールド名。ここに追加すればカレンダーにも自動で載る
+const CALENDAR_EVENTS = [
+  { field: 'startDate',      label: '着工', color: '#C62828' },
+  { field: 'completionDate', label: '完工', color: '#2E7D32' },
+];
+
 function getStatusInfo(key) {
   return STATUSES.find(s => s.key === key) || STATUSES[0];
 }
